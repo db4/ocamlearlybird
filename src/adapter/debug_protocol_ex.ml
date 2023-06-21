@@ -58,6 +58,7 @@ module Launch_command = struct
       env : String_opt_dict.t; [@default String_opt_dict.empty]
       stop_on_entry : bool; [@default false] [@key "stopOnEntry"]
       program : string;
+      symbols : string option [@default None];
       arguments : string list; [@default []]
       console : Console.t; [@default Console.Integrated_terminal]
       source_dirs : string list; [@default []]
