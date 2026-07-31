@@ -103,8 +103,13 @@ let launch ~rpc ~init_args ~capabilities ~launch_args =
       | None -> fun _ -> true
       | Some globber -> fun path -> Glob.eval globber path
     in
+    let symbols_file = match String_opt_dict.find "CAML_DEBUG_FILE" launch_args.env with
+      | None
+      | Some "" -> launch_args.program
+      | Some symbols_file -> symbols_file in
+    Logs.debug (fun m -> m "symbols file: %s" symbols_file);
     Debugger.init
-      (Debugger.make_options ~debug_sock ~symbols_file:launch_args.program
+      (Debugger.make_options ~debug_sock ~symbols_file
          ?yield_steps:launch_args.yield_steps
          ~follow_fork_mode:
            (match launch_args.follow_fork_mode with
